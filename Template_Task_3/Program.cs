@@ -1,4 +1,6 @@
-﻿using Template_Task_3.DemoClasses;
+﻿using System.Collections;
+using System.Xml.Linq;
+using Template_Task_3.DemoClasses;
 using Template_Task_3.Helpers;
 using Template_Task_3.StackAndHeap;
 
@@ -156,13 +158,49 @@ internal class Program
         // Exempel på hur du lägger till en produkt i dictionaryn:
         // products["KAFFE"] = new Product("KAFFE", "Kaffe", 15.00m, 50);
         //
-        // TODO:
+        // TODO->DONE:
         // Lägg till minst 10 produkter i products-dictionaryn.
         // Välj egna koder, namn, priser och lagersaldon.
 
-        // *** Edit - Urban Janssson *** //
-        // HÄR BÖRJAR MITT JOBB! :)
 
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        // HÄR BÖRJAR JOBBET! :)
+        //
+        // Vi börjar då med att seed'a in 10 produkter genom att skapa 
+        // 10 nya instanser av klasse Product, som läggs in i dic products.
+        //
+        // public Product(string code, string name, decimal price, int stock)
+        // {
+        //     Code = code;
+        //     Name = name;
+        //     Price = price;
+        //     Stock = stock;
+        // }
+        //
+        // MJÖLK Mjölk
+        // BRÖD Bröd
+        // SMÖR Smör
+        // OST Ost
+        // KORV Korv
+        // FISK Fisk
+        // PIZZA Pizza
+        // ÖL Öl
+        // SNUS Snus
+        //
+        // (suffix m står för 'money')
+        //
+        products["KAFFE"] = new Product("KAFFE", "Kaffe", 89.00m, 100);
+        products["MJÖLK"] = new Product("MJÖLK", "Mjölk", 21.20m, 40);
+        products["BRÖD"] = new Product("BRÖD", "Bröd", 32.30m, 20);
+        products["SMÖR"] = new Product("SMÖR", "Smör", 28.00m, 10);
+        products["OST"] = new Product("OST", "Ost", 53.50m, 30);
+        products["KORV"] = new Product("KORV", "Korv", 43.60m, 15);
+        products["FISK"] = new Product("FISK", "Fisk", 109.99m, 5);
+        products["PIZZA"] = new Product("PIZZA", "Pizza", 35.40m, 25);
+        products["ÖL"] = new Product("ÖL", "Öl", 14.50m, 40);
+        products["SNUS"] = new Product("SNUS", "Snus", 35.60m, 50);
     }
 
     static void PrintProducts()
