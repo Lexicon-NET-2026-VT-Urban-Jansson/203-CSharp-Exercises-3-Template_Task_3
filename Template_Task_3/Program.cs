@@ -169,7 +169,7 @@ internal class Program
         // HÄR BÖRJAR JOBBET! :)
         //
         // Vi börjar då med att seed'a in 10 produkter genom att skapa 
-        // 10 nya instanser av klasse Product, som läggs in i dic products.
+        // 10 nya instanser av klassen Product, som läggs in i dic products.
         //
         // public Product(string code, string name, decimal price, int stock)
         // {
@@ -178,16 +178,6 @@ internal class Program
         //     Price = price;
         //     Stock = stock;
         // }
-        //
-        // MJÖLK Mjölk
-        // BRÖD Bröd
-        // SMÖR Smör
-        // OST Ost
-        // KORV Korv
-        // FISK Fisk
-        // PIZZA Pizza
-        // ÖL Öl
-        // SNUS Snus
         //
         // (suffix m står för 'money')
         //
@@ -207,7 +197,7 @@ internal class Program
     {
         Console.WriteLine("=== Produkter ===");
 
-        // TODO:
+        // TODO->DONE:
         // Loopa igenom dictionaryn products.
         // Skriv ut varje produkt.
         // Räkna även ut totalt lagervärde.
@@ -215,9 +205,25 @@ internal class Program
         // product.Price * product.Stock
 
 
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        decimal stockValue = 0;
+        foreach (var product in products)
+        {
+            stockValue += product.Value.Price * product.Value.Stock;
+            Console.WriteLine($"Produkt: {product.Value.Name}");
+        }
+        Console.WriteLine("=================");
+        Console.WriteLine($"Totalt lagervärde: {stockValue}");
+        Console.WriteLine("");
+
         // Fråga:
         // Varför passar Dictionary bra för ett produktregister?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        // TODO->DONE - skriv ditt svar här
+        Console.WriteLine("Dictionary passar bra för ett produktregister,");
+        Console.WriteLine("då vi får Key-Value par med unika Keys som förhindrar dubbletter,");
+        Console.WriteLine("och som dessutom ger snabb sökning på Key.");
     }
 
     static void FindProduct()
