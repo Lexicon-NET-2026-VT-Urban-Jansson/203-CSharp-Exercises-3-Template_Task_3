@@ -162,7 +162,6 @@ internal class Program
         // Lägg till minst 10 produkter i products-dictionaryn.
         // Välj egna koder, namn, priser och lagersaldon.
 
-
         // --------------------------------------------------------------------
         // *** Edit - Urban Janssson ***
         // --------------------------------------------------------------------
@@ -204,7 +203,6 @@ internal class Program
         // Lagervärde för en produkt:
         // product.Price * product.Stock
 
-
         // --------------------------------------------------------------------
         // *** Edit - Urban Janssson ***
         // --------------------------------------------------------------------
@@ -228,21 +226,27 @@ internal class Program
 
     static void FindProduct()
     {
-        Console.Write("Ange produktkod: ");
-        
-
-        // TODO:
+        // TODO->DONE:
         // Hämta produktens code
         // Gör koden till stora bokstäver med .ToUpper()
         // Slå upp produkten med TryGetValue
         // Om produkten finns, skriv ut den.
         // Om produkten saknas, skriv ett felmeddelande.
 
-        Console.WriteLine("TODO: Implementera FindProduct.");
+        Console.Write("Ange produktkod: ");
+        string prodCode = Console.ReadLine()!;
+        prodCode = prodCode.ToUpper();
 
+        if (products.TryGetValue(prodCode, out var product))
+            Console.WriteLine($"Produkt: {product.Name} | Pris: {product.Price} | På lager: {product.Stock}");
+        else
+            Console.WriteLine($"Kan inte hitta produktkod {prodCode}.");
+
+        Console.WriteLine("");
         // Fråga:
         // Varför är TryGetValue bättre än att skriva products[code] direkt?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        // TODO->DONE - skriv ditt svar här
+        Console.WriteLine("TryGetValue är bättre för det hanterar automatiskt felaktig input.");
     }
 
     static void AddProduct()
