@@ -160,6 +160,8 @@ internal class Program
         // Lägg till minst 10 produkter i products-dictionaryn.
         // Välj egna koder, namn, priser och lagersaldon.
 
+        // *** Edit - Urban Janssson *** //
+        // HÄR BÖRJAR MITT JOBB! :)
 
     }
 
