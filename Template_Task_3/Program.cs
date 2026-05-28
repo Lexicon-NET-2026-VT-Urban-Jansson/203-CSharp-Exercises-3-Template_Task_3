@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Xml.Linq;
 using Template_Task_3.DemoClasses;
 using Template_Task_3.Helpers;
@@ -24,12 +25,12 @@ internal class Program
 
     static void Main(string[] args)
     {
-        //ToDo implementera 
+        //ToDo->DONE implementera 
         SeedProducts();
 
         bool running = true;
 
-       do
+        do
         {
             PrintMenu();
 
@@ -131,7 +132,7 @@ internal class Program
             Console.ReadKey();
             Console.Clear();
         }
-        while(running);
+        while (running);
     }
 
     static void PrintMenu()
@@ -206,6 +207,8 @@ internal class Program
         // --------------------------------------------------------------------
         // *** Edit - Urban Janssson ***
         // --------------------------------------------------------------------
+        //
+        // Skriv ut alla produkter och beräkna totalt lagervärde
         decimal stockValue = 0;
         foreach (var product in products)
         {
@@ -220,8 +223,8 @@ internal class Program
         // Varför passar Dictionary bra för ett produktregister?
         // TODO->DONE - skriv ditt svar här
         Console.WriteLine("Dictionary passar bra för ett produktregister,");
-        Console.WriteLine("då vi får Key-Value par med unika Keys som förhindrar dubbletter,");
-        Console.WriteLine("och som dessutom ger snabb sökning på Key.");
+        Console.WriteLine("då vi får Key-Value par med unika Keys som ");
+        Console.WriteLine("förhindrar dubbletter (och ger snabb sökning?)");
     }
 
     static void FindProduct()
@@ -233,11 +236,18 @@ internal class Program
         // Om produkten finns, skriv ut den.
         // Om produkten saknas, skriv ett felmeddelande.
 
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        //
+        // Sök en produkt
         Console.Write("Ange produktkod: ");
         string prodCode = Console.ReadLine()!;
         prodCode = prodCode.ToUpper();
 
+        // Försök att hämta produktkod
         if (products.TryGetValue(prodCode, out var product))
+            // Och skriv ut om den finns
             Console.WriteLine($"Produkt: {product.Name} | Pris: {product.Price} | På lager: {product.Stock}");
         else
             Console.WriteLine($"Kan inte hitta produktkod {prodCode}.");
@@ -251,9 +261,7 @@ internal class Program
 
     static void AddProduct()
     {
-        Console.WriteLine("TODO: Implementera AddProduct.");
-      
-        // TODO:
+        // TODO->DONE:
         // Läs in produktkod.
         // Gör produktkoden till stora bokstäver med .ToUpper().
         // Kontrollera om koden redan finns i products — skriv felmeddelande om den gör det.
@@ -264,9 +272,44 @@ internal class Program
         // Lägg till produkten i products-dictionaryn.
         // Lägg till ett loggmeddelande i logMessages.
 
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        //
+        // Registrera ny produkt
+        Console.WriteLine("-------------------------");
+        Console.WriteLine("* Registrera ny produkt *");
+        Console.WriteLine("-------------------------");
+        Console.Write("Ange produktkod: ");
+        string prodCode = Console.ReadLine()!;
+        prodCode = prodCode.ToUpper();
+
+        // Kolla om produkten redan finns
+        if (products.TryGetValue(prodCode, out var product))
+            Console.WriteLine($"Tyvärr, produktkod {prodCode} finns redan i registret.");
+        else
+        {
+            // Om inte - Spara produkt
+            Console.Write("Ange produktnamn: ");
+            string prodNamne = Console.ReadLine()!;
+            decimal prodPrice = InputHelpers.ReadDecimal("Ange pris: ");
+            int prodStock = InputHelpers.ReadInt("Ange antal på lager: ");
+            products[prodCode] = new Product(prodCode, prodNamne, prodPrice, prodStock);
+            
+            // Logga händelse
+            var nowDateTime = DateTime.Now;
+            logMessages.Add(nowDateTime.ToString("yyyy-MM-dd HH:mm:ss") + " - Ny produktkod: " + prodCode);
+            // Skriv ut senaste log i Debug
+            Debug.WriteLine(logMessages[logMessages.Count-1].ToString());
+        }
+
         // Fråga:
         // Vad är nyckeln och vad är värdet i products?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        // Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine();
+        Console.WriteLine("Hämtar vi det här -> products[\"KAFFE\"]");
+        Console.WriteLine("Så får vi det här -> " + products["KAFFE"]);
+        Console.WriteLine("Där KAFFE är nyckeln och resten är värdet, dvs Product.");
     }
 
     static void ChangeStock()
@@ -280,6 +323,15 @@ internal class Program
         // Ändra produktens Stock. Validera även i product
         // 
         // Logga ändringen.
+
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        // public Product(string code, string name, decimal price, int stock)
+        // products["KAFFE"] = new Product("KAFFE", "Kaffe", 89.00m, 100);
+        //
+
+
 
     }
 
@@ -336,7 +388,7 @@ internal class Program
     static void AddCustomerToQueue()
     {
         Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
-        
+
         // TODO:
         // Läs in kundens namn (använd InputHelpers.ReadString).
         // Skapa ett Customer-objekt med namnet.
@@ -352,7 +404,7 @@ internal class Program
     static void ServeNextCustomer()
     {
         Console.WriteLine("TODO: Implementera ServeNextCustomer.");
-        
+
         // TODO:
         // Kontrollera om customerQueue är tom — skriv meddelande om den är det.
         // Om den inte är tom:
@@ -638,7 +690,7 @@ internal class Program
             Console.WriteLine("Strängen är INTE välformad.");
         }
 
-        
+
     }
 
     static bool CheckParentheses(string text)
