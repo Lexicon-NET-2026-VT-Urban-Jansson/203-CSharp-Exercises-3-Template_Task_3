@@ -9,6 +9,12 @@ namespace Template_Task_3;
 
 internal class Program
 {
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    //
+    const bool doDebug = true;
+
     // Dictionary: snabb uppslagning av produkter via produktkod (key = kod, value = produkt)
     static Dictionary<string, Product> products = new Dictionary<string, Product>();
 
@@ -132,7 +138,7 @@ internal class Program
             Console.ReadKey();
             Console.Clear();
         }
-        while (running);
+        while(running);
     }
 
     static void PrintMenu()
@@ -227,6 +233,39 @@ internal class Program
         Console.WriteLine("förhindrar dubbletter (och ger snabb sökning?)");
     }
 
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    private static void WriteProduct(string prodCode, bool edited)
+    {
+        // Skriv ut produkten
+        if (edited)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Registreringen är genomförd.");
+        }
+
+        Console.WriteLine($"Produkt: {products[prodCode].Name} " +
+            $"| Pris: {products[prodCode].Price} kr " +
+            $"| Lagersaldo: {products[prodCode].Stock}");
+    }
+
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    private static void DoLog(string log)
+    {
+        // Logga händelse
+        var nowDateTime = DateTime.Now;
+        logMessages.Add(nowDateTime.ToString("*** yyyy-MM-dd HH:mm:ss") + " - " + log + " ***");
+
+        // Skriv ut senaste log i Debug
+        // if (doDebug) Debug.WriteLine(logMessages[logMessages.Count - 1].ToString());
+        //
+        // Efter BRA tips från Dimitris!
+        if (doDebug) Debug.WriteLine(logMessages.Last());
+    }
+
     static void FindProduct()
     {
         // TODO->DONE:
@@ -247,8 +286,8 @@ internal class Program
 
         // Försök att hämta produktkod
         if (products.TryGetValue(prodCode, out var product))
-            // Och skriv ut om den finns
-            Console.WriteLine($"Produkt: {product.Name} | Pris: {product.Price} | På lager: {product.Stock}");
+            // Och skriv ut, om den finns
+            WriteProduct(prodCode, false);
         else
             Console.WriteLine($"Kan inte hitta produktkod {prodCode}.");
 
@@ -289,18 +328,20 @@ internal class Program
             Console.WriteLine($"Tyvärr, produktkod {prodCode} finns redan i registret.");
         else
         {
-            // Om inte - Spara produkt
+            // Om inte - hämta produktvärden
             Console.Write("Ange produktnamn: ");
             string prodNamne = Console.ReadLine()!;
             decimal prodPrice = InputHelpers.ReadDecimal("Ange pris: ");
-            int prodStock = InputHelpers.ReadInt("Ange antal på lager: ");
+            int prodStock = InputHelpers.ReadInt("Ange lagersaldo: ");
+
+            // Spara produkten i dictionaryn products
             products[prodCode] = new Product(prodCode, prodNamne, prodPrice, prodStock);
             
+            // Skriv ut produkten
+            WriteProduct(prodCode, true);
+
             // Logga händelse
-            var nowDateTime = DateTime.Now;
-            logMessages.Add(nowDateTime.ToString("yyyy-MM-dd HH:mm:ss") + " - Ny produktkod: " + prodCode);
-            // Skriv ut senaste log i Debug
-            Debug.WriteLine(logMessages[logMessages.Count-1].ToString());
+            DoLog("Ny produktkod: " + prodCode);
         }
 
         // Fråga:
@@ -314,8 +355,8 @@ internal class Program
 
     static void ChangeStock()
     {
-        Console.WriteLine("TODO: Implementera ChangeStock.");
-        // TODO:
+        // Console.WriteLine("TODO: Implementera ChangeStock.");
+        // TODO->DONE:
         // Läs in produktkod.
         // Slå upp produkten med TryGetValue.
         // Läs in nytt lagersaldo från användaren.
@@ -327,16 +368,38 @@ internal class Program
         // --------------------------------------------------------------------
         // *** Edit - Urban Janssson ***
         // --------------------------------------------------------------------
+        //
         // public Product(string code, string name, decimal price, int stock)
         // products["KAFFE"] = new Product("KAFFE", "Kaffe", 89.00m, 100);
         //
+        // Ändra lagersaldo för produkt
+        Console.WriteLine("--------------------");
+        Console.WriteLine("* Ändra lagersaldo *");
+        Console.WriteLine("--------------------");
+        Console.Write("Ange produktkod: ");
+        string prodCode = Console.ReadLine()!;
+        prodCode = prodCode.ToUpper();
 
+        // Kolla om produkten finns
+        if (products.TryGetValue(prodCode, out var product))
+        {
+            // Om ja - Uppdatera lagersaldo
+            Console.WriteLine($"Lagersaldo för {products[prodCode].Name}: {products[prodCode].Stock}");
+            products[prodCode].Stock = InputHelpers.ReadInt("Ange nytt lagersaldo: ");
+            
+            // Skriv ut produkten
+            WriteProduct(prodCode, true);
 
-
+            // Logga händelse
+            DoLog("Nytt lagersaldo: " + products[prodCode].Stock + " för produkt " + products[prodCode].Name);
+        }
+        else
+        {
+            Console.WriteLine($"Tyvärr, produktkod {prodCode} kan inte hittas i registret.");
+        }
     }
-
-    static decimal GetPriceBad(string code)
-    {
+        
+    static decimal GetPriceBad(string code) { 
         if (code == "KAF")
         {
             return 15;
