@@ -261,12 +261,7 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Sök en produkt
-        WriteCaption(" * Sök Produkt *");
-        Console.Write("Ange produktkod: ");
-
-        string prodCode = Console.ReadLine()!;
-        prodCode = prodCode.ToUpper().Trim();
-        Console.WriteLine();
+        string prodCode = GetInput(" * Sök Produkt *", "Ange produktkod: ");
 
         // Försök att hämta produktkod
         if (products.TryGetValue(prodCode, out var product))
@@ -300,11 +295,7 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Registrera ny produkt
-        WriteCaption(" * Registrera ny produkt *");
-        Console.Write("Ange produktkod: ");
-
-        string prodCode = Console.ReadLine()!;
-        prodCode = prodCode.ToUpper().Trim();
+        string prodCode = GetInput(" * Registrera ny produkt *", "Ange produktkod: ");
 
         if (prodCode == "")
         {
@@ -322,7 +313,6 @@ internal class Program
             Console.Write("Ange produktnamn: ");
             string prodNamne = Console.ReadLine()!;
             if (prodNamne.Trim() == "") prodNamne = "[inget namn]";
-            
             decimal prodPrice = InputHelpers.ReadDecimal("Ange pris: ");
             int prodStock = InputHelpers.ReadInt("Ange lagersaldo: ");
 
@@ -363,11 +353,7 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Ändra lagersaldo för produkt
-        WriteCaption(" * Ändra lagersaldo *");
-        Console.Write("Ange produktkod: ");
-
-        string prodCode = Console.ReadLine()!;
-        prodCode = prodCode.ToUpper().Trim();
+        string prodCode = GetInput(" * Ändra lagersaldo *", "Ange produktkod: ");
 
         // Kolla om produkten finns
         if (products.TryGetValue(prodCode, out var product))
@@ -380,13 +366,10 @@ internal class Program
             WriteProduct(prodCode, true, true);
 
             // Logga händelse
-            //DoLog("Nytt lagersaldo: " + products[prodCode].Stock + " - Produkt: " + products[prodCode].Name);
             DoLog("Produkt: " + products[prodCode].Name + " - Nytt lagersaldo: " + products[prodCode].Stock);
         }
         else
-        {
             Console.WriteLine($"Tyvärr, produktkod {prodCode} kan inte hittas i registret.");
-        }
     }
 
     // --------------------------------------------------------------------
@@ -434,10 +417,47 @@ internal class Program
         //if (doDebug) Debug.WriteLine("*** " + logMessages.Last() + " ***");
         if (doDebug) Debug.WriteLine("======== " + logMessages.Last() + " ========");
     }
-    //
-    // public Product(string code, string name, decimal price, int stock)
-    // products["KAFFE"] = new Product("KAFFE", "Kaffe", 89.00m, 100);
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    private static string GetInput(string cap, string msg)
+    {
+        WriteCaption(cap);
+        Console.Write(msg);
 
+        string getStr = Console.ReadLine()!;
+        getStr = getStr.ToUpper().Trim();
+        Console.WriteLine();
+        return getStr;
+    }
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    private static string GetCustomer(string cap, string msg)
+    {
+        WriteCaption(cap);
+        Console.Write(msg);
+
+        string getStr = Console.ReadLine()!;
+        getStr = getStr.Trim();
+        Console.WriteLine();
+        return getStr;
+    }
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    private static void WriteCustomer(string msg, bool edited, bool doLine)
+    {
+        // Skriv ut produkten
+        if (edited)
+        {
+            Console.WriteLine("Registreringen är genomförd.");
+            Console.WriteLine();
+        }
+        if (doLine) Console.WriteLine(oneLine);
+        Console.WriteLine(msg);
+        if (doLine) Console.WriteLine(oneLine);
+    }
 
 
     static decimal GetPriceBad(string code) { 
@@ -495,17 +515,14 @@ internal class Program
         Console.WriteLine("och kan utökas utan att behöva skriva ny kod.");
         Console.WriteLine();
 
+        // Seed'a productsBetter 
         productsBetter["KAF"] = new Product("KAF", "Kaffe", 15.00m, 100);
         productsBetter["TE"] = new Product("TE", "Te", 12.00m, 100);
         productsBetter["BUL"] = new Product("BUL", "Bullar", 18.00m, 100);
         productsBetter["MCK"] = new Product("MCK", "Mackor", 35.00m, 100);
 
-        WriteCaption(" * Sök Produkt *");
-        Console.Write("Ange produktkod: ");
-
-        string prodCode = Console.ReadLine()!;
-        prodCode = prodCode.ToUpper().Trim();
-        Console.WriteLine();
+        // Läs in produktkod
+        string prodCode = GetInput(" * Sök Produkt *", "Ange produktkod: ");
 
         // Försök att hämta produktkod
         if (productsBetter.TryGetValue(prodCode, out var product))
@@ -516,7 +533,6 @@ internal class Program
                 $"| Pris: {productsBetter[prodCode].Price} kr " +
                 $"| Lagersaldo: {productsBetter[prodCode].Stock}");
             Console.WriteLine(oneLine);
-
             return product.Price;
         }
         else
@@ -536,18 +552,39 @@ internal class Program
 
     static void AddCustomerToQueue()
     {
-        Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
-
-        // TODO:
+        // Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
+        //
+        // TODO->DONE:
         // Läs in kundens namn (använd InputHelpers.ReadString).
         // Skapa ett Customer-objekt med namnet.
         // Lägg kunden i customerQueue med Enqueue.
         // Skriv ut att kunden lagts till och vilken plats i kön de har.
         // Lägg till ett loggmeddelande i logMessages.
 
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        //
+        // Spara ny kund i customerQueue
+        string newCustomer = GetCustomer(" * Lagra ny kund *", "Ange kundens namn: ");
+        if (newCustomer == "")
+            Console.WriteLine("Felaktigt namn!");
+        else
+        {
+            Customer customer = new Customer(newCustomer);
+            customerQueue.Enqueue(customer);
+
+            WriteCustomer($"Ny kund: {customer.Name} är lagrad på plats {customerQueue.Count}", true, true);
+            DoLog($"Ny kund: {customer.Name} på plats {customerQueue.Count}");
+        }
+
+        //if (doDebug) foreach (Customer customer in customerQueue) 
+        //    Debug.WriteLine(customer.Name + " - " + customer.AddedAt);
+
         // Fråga:
         // Vad betyder FIFO?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine();
+        Console.WriteLine("Svar: FIFO betyder 'First In, First Out', i en kö.");
     }
 
     static void ServeNextCustomer()
