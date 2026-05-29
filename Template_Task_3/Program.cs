@@ -71,8 +71,10 @@ internal class Program
                     break;
 
                 case MenuConstants.GetBetterPrice:
-                    Console.Write("Ange produktkod: ");
-                    GetPriceBetter(ReadLine.ToUpper());
+                    // *** Edit - Urban Janssson ***
+                    //Console.Write("Ange produktkod: ");
+                    //GetPriceBetter(ReadLine.ToUpper());
+                    GetPriceBetter();
                     break;
 
                 case MenuConstants.AddCustomerToQueue:
@@ -239,9 +241,10 @@ internal class Program
         // Fråga:
         // Varför passar Dictionary bra för ett produktregister?
         // TODO->DONE - skriv ditt svar här
+        Console.WriteLine("Svar:");
         Console.WriteLine("Dictionary passar bra för ett produktregister,");
         Console.WriteLine("då vi får Key-Value par med unika Keys som ");
-        Console.WriteLine("förhindrar dubbletter (och ger snabb sökning?)");
+        Console.WriteLine("förhindrar dubbletter och ger snabb sökning.)");
     }
 
     static void FindProduct()
@@ -262,7 +265,7 @@ internal class Program
         Console.Write("Ange produktkod: ");
 
         string prodCode = Console.ReadLine()!;
-        prodCode = prodCode.ToUpper();
+        prodCode = prodCode.ToUpper().Trim();
         Console.WriteLine();
 
         // Försök att hämta produktkod
@@ -337,6 +340,7 @@ internal class Program
         // Vad är nyckeln och vad är värdet i products?
         // Console.WriteLine("Svar: TODO - skriv ditt svar här");
         Console.WriteLine();
+        Console.WriteLine("Svar:");
         Console.WriteLine("Hämtar vi det här -> products[\"KAFFE\"]");
         Console.WriteLine("Så får vi det här -> " + products["KAFFE"]);
         Console.WriteLine("Där KAFFE är nyckeln och resten är värdet, dvs Product.");
@@ -363,7 +367,7 @@ internal class Program
         Console.Write("Ange produktkod: ");
 
         string prodCode = Console.ReadLine()!;
-        prodCode = prodCode.ToUpper();
+        prodCode = prodCode.ToUpper().Trim();
 
         // Kolla om produkten finns
         if (products.TryGetValue(prodCode, out var product))
@@ -459,9 +463,16 @@ internal class Program
         }
     }
 
-    static decimal GetPriceBetter(string code)
+    // --------------------------------------------------------------------
+    // *** Edit - Urban Janssson ***
+    // --------------------------------------------------------------------
+    private static Dictionary<string, Product> productsBetter = new Dictionary<string, Product>();
+
+    //static decimal GetPriceBetter(string code)
+    static decimal GetPriceBetter()
     {
-        // TODO:
+
+        // TODO->DONE:
         // Skriv om GetPriceBad med en lokal Dictionary istället för if/else.
         // Samma fyra produkter och priser som i GetPriceBad ska finnas.
         // Använd TryGetValue för att slå upp priset.
@@ -469,12 +480,50 @@ internal class Program
         //
         // Jämför sedan de två metoderna — vad händer om du behöver lägga till
         // en femte produkt? Vilken metod är enklare att utöka?
-
+        //
         // Fråga:
         // Varför är Dictionary-lösningen bättre än många if/else-satser?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        //
+        //Console.WriteLine("Svar: TODO - skriv cditt svar här");
+        //return -1;
 
-        return -1;
+        // --------------------------------------------------------------------
+        // *** Edit - Urban Janssson ***
+        // --------------------------------------------------------------------
+        Console.WriteLine();
+        Console.WriteLine("Svar: Dictionary-lösningen är bättre då den är dynamisk,");
+        Console.WriteLine("och kan utökas utan att behöva skriva ny kod.");
+        Console.WriteLine();
+
+        productsBetter["KAF"] = new Product("KAF", "Kaffe", 15.00m, 100);
+        productsBetter["TE"] = new Product("TE", "Te", 12.00m, 100);
+        productsBetter["BUL"] = new Product("BUL", "Bullar", 18.00m, 100);
+        productsBetter["MCK"] = new Product("MCK", "Mackor", 35.00m, 100);
+
+        WriteCaption(" * Sök Produkt *");
+        Console.Write("Ange produktkod: ");
+
+        string prodCode = Console.ReadLine()!;
+        prodCode = prodCode.ToUpper().Trim();
+        Console.WriteLine();
+
+        // Försök att hämta produktkod
+        if (productsBetter.TryGetValue(prodCode, out var product))
+        {
+            // Om den finns, skriv ut & returnera priset
+            Console.WriteLine(oneLine);
+            Console.WriteLine($"Produkt: {productsBetter[prodCode].Name} " +
+                $"| Pris: {productsBetter[prodCode].Price} kr " +
+                $"| Lagersaldo: {productsBetter[prodCode].Stock}");
+            Console.WriteLine(oneLine);
+
+            return product.Price;
+        }
+        else
+        {
+            Console.WriteLine($"Kan inte hitta produktkod {prodCode}.");
+            return -1;
+        }
     }
 
     #endregion
