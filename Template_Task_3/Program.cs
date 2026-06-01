@@ -414,7 +414,6 @@ internal class Program
         // if (doDebug) Debug.WriteLine(logMessages[logMessages.Count - 1].ToString());
         //
         // Efter BRA tips från Dimitris!
-        //if (doDebug) Debug.WriteLine("*** " + logMessages.Last() + " ***");
         if (doDebug) Debug.WriteLine("======== " + logMessages.Last() + " ========");
     }
     // --------------------------------------------------------------------
@@ -529,10 +528,11 @@ internal class Program
         {
             // Om den finns, skriv ut & returnera priset
             Console.WriteLine(oneLine);
-            Console.WriteLine($"Produkt: {productsBetter[prodCode].Name} " +
-                $"| Pris: {productsBetter[prodCode].Price} kr " +
-                $"| Lagersaldo: {productsBetter[prodCode].Stock}");
+            Console.WriteLine($"Produkt: {product.Name} " + 
+                $"| Pris: {product.Price} kr " + 
+                $"| Lagersaldo: {product.Stock}");
             Console.WriteLine(oneLine);
+
             return product.Price;
         }
         else
