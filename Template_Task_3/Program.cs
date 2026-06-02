@@ -245,6 +245,8 @@ internal class Program
         Console.WriteLine("Dictionary passar bra för ett produktregister,");
         Console.WriteLine("då vi får Key-Value par med unika Keys som ");
         Console.WriteLine("förhindrar dubbletter och ger snabb sökning.)");
+
+        Util.TetsMe();
     }
 
     static void FindProduct()
