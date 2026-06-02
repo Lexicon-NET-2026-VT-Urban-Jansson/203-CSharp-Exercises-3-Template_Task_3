@@ -9,20 +9,12 @@ namespace Template_Task_3;
 
 internal class Program
 {
+    // Dictionary: snabb uppslagning av produkter via produktkod (key = kod, value = produkt)
+    public static Dictionary<string, Product> products = new Dictionary<string, Product>();
     // --------------------------------------------------------------------
     // *** Edit - Urban Janssson ***
     // --------------------------------------------------------------------
-    //
-//#if DEBUG
-//    private const bool doDebug = true;
-//#else
-//    const bool doDebug = false;
-//#endif
-//    private const string oneLine = "----------------------------------------------------------------";
-
-
-    // Dictionary: snabb uppslagning av produkter via produktkod (key = kod, value = produkt)
-    public static Dictionary<string, Product> products = new Dictionary<string, Product>();
+    // public = INTE BRA! Men jag hinner inte fixa det nu...
 
     // List: enkel logg över vad som hänt i programmet — ordnad och växer dynamiskt
     public static List<string> logMessages = new List<string>();
@@ -372,92 +364,6 @@ internal class Program
             Console.WriteLine($"Tyvärr, produktkod {prodCode} kan inte hittas i registret.");
     }
 
-    //// --------------------------------------------------------------------
-    //// *** Edit - Urban Janssson ***
-    //// --------------------------------------------------------------------
-    //private static void WriteCaption(string cap)
-    //{
-    //    Console.WriteLine(oneLine);
-    //    Console.WriteLine(cap);
-    //    Console.WriteLine(oneLine);
-    //}
-    //// --------------------------------------------------------------------
-    //// *** Edit - Urban Janssson ***
-    //// --------------------------------------------------------------------
-    //private static void WriteProduct(string prodCode, bool edited, bool doLine)
-    //{
-    //    // Skriv ut produkten
-    //    if (edited)
-    //    {
-    //        Console.WriteLine();
-    //        Console.WriteLine("Registreringen är genomförd.");
-    //        Console.WriteLine();
-    //    }
-    //    if (doLine) Console.WriteLine(oneLine);
-
-    //    Console.WriteLine($"Produkt: {products[prodCode].Name} " +
-    //        $"| Pris: {products[prodCode].Price} kr " +
-    //        $"| Lagersaldo: {products[prodCode].Stock}");
-
-    //    if (doLine) Console.WriteLine(oneLine);
-    //}
-    //// --------------------------------------------------------------------
-    //// *** Edit - Urban Janssson ***
-    //// --------------------------------------------------------------------
-    //private static void DoLog(string log)
-    //{
-    //    // Logga händelse
-    //    var nowDateTime = DateTime.Now;
-    //    logMessages.Add(nowDateTime.ToString("yyyy-MM-dd HH:mm:ss") + " - " + log);
-
-    //    // Skriv ut senaste log i Debug
-    //    // if (doDebug) Debug.WriteLine(logMessages[logMessages.Count - 1].ToString());
-    //    //
-    //    // Efter BRA tips från Dimitris!
-    //    if (doDebug) Debug.WriteLine("======== " + logMessages.Last() + " ========");
-    //}
-    //// --------------------------------------------------------------------
-    //// *** Edit - Urban Janssson ***
-    //// --------------------------------------------------------------------
-    //private static string GetInput(string cap, string msg)
-    //{
-    //    WriteCaption(cap);
-    //    Console.Write(msg);
-
-    //    string getStr = Console.ReadLine()!;
-    //    getStr = getStr.ToUpper().Trim();
-    //    Console.WriteLine();
-    //    return getStr;
-    //}
-    //// --------------------------------------------------------------------
-    //// *** Edit - Urban Janssson ***
-    //// --------------------------------------------------------------------
-    //private static string GetCustomer(string cap, string msg)
-    //{
-    //    WriteCaption(cap);
-    //    Console.Write(msg);
-
-    //    string getStr = Console.ReadLine()!;
-    //    getStr = getStr.Trim();
-    //    Console.WriteLine();
-    //    return getStr;
-    //}
-    //// --------------------------------------------------------------------
-    //// *** Edit - Urban Janssson ***
-    //// --------------------------------------------------------------------
-    //private static void WriteCustomer(string msg, bool edited, bool doLine)
-    //{
-    //    // Skriv ut produkten
-    //    if (edited)
-    //    {
-    //        Console.WriteLine("Registreringen är genomförd.");
-    //        Console.WriteLine();
-    //    }
-    //    if (doLine) Console.WriteLine(oneLine);
-    //    Console.WriteLine(msg);
-    //    if (doLine) Console.WriteLine(oneLine);
-    //}
-
 
     static decimal GetPriceBad(string code) { 
         if (code == "KAF")
@@ -528,8 +434,8 @@ internal class Program
         {
             // Om den finns, skriv ut & returnera priset
             Console.WriteLine(Util.oneLine);
-            Console.WriteLine($"Produkt: {product.Name} " + 
-                $"| Pris: {product.Price} kr " + 
+            Console.WriteLine($"Produkt: {product.Name} " +
+                $"| Pris: {product.Price} kr " +
                 $"| Lagersaldo: {product.Stock}");
             Console.WriteLine(Util.oneLine);
 
@@ -577,9 +483,6 @@ internal class Program
             Util.WriteCustomer($"Ny kund: {customer.Name} är lagrad på plats {customerQueue.Count}", true, true);
             Util.DoLog($"Ny kund: {customer.Name} på plats {customerQueue.Count}");
         }
-
-        //if (doDebug) foreach (Customer customer in customerQueue) 
-        //    Debug.WriteLine(customer.Name + " - " + customer.AddedAt);
 
         // Fråga:
         // Vad betyder FIFO?
