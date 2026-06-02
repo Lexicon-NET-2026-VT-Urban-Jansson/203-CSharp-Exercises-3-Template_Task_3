@@ -13,26 +13,26 @@ internal class Program
     // *** Edit - Urban Janssson ***
     // --------------------------------------------------------------------
     //
-#if DEBUG
-    private const bool doDebug = true;
-#else
-    const bool doDebug = false;
-#endif
-    private const string oneLine = "----------------------------------------------------------------";
+//#if DEBUG
+//    private const bool doDebug = true;
+//#else
+//    const bool doDebug = false;
+//#endif
+//    private const string oneLine = "----------------------------------------------------------------";
 
 
     // Dictionary: snabb uppslagning av produkter via produktkod (key = kod, value = produkt)
-    static Dictionary<string, Product> products = new Dictionary<string, Product>();
+    public static Dictionary<string, Product> products = new Dictionary<string, Product>();
 
     // List: enkel logg över vad som hänt i programmet — ordnad och växer dynamiskt
-    static List<string> logMessages = new List<string>();
+    public static List<string> logMessages = new List<string>();
 
     // Queue: FIFO — kunder betjänas i den ordning de ställde sig i kön
     static Queue<Customer> customerQueue = new Queue<Customer>();
 
     // Stack: LIFO — används för att kunna ångra den senaste försäljningen
     static Stack<Sale> saleHistory = new Stack<Sale>();
-    private static object cap;
+    private static object ? cap;
 
     static string ReadLine => Console.ReadLine() ?? string.Empty;
 
@@ -224,18 +224,18 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Skriv ut alla produkter och beräkna totalt lagervärde
-        WriteCaption(" * Produkter *");
+        Util.WriteCaption(" * Produkter *");
 
         decimal stockValue = 0;
         foreach (var product in products)
         {
             stockValue += product.Value.Price * product.Value.Stock;
-            WriteProduct(product.Key, false, false);
+            Util.WriteProduct(product.Key, false, false);
         }
         
-        Console.WriteLine(oneLine);
+        Console.WriteLine(Util.oneLine);
         Console.WriteLine($"Totalt lagervärde: {stockValue} kr");
-        Console.WriteLine(oneLine);
+        Console.WriteLine(Util.oneLine);
         Console.WriteLine();
 
         // Fråga:
@@ -245,8 +245,6 @@ internal class Program
         Console.WriteLine("Dictionary passar bra för ett produktregister,");
         Console.WriteLine("då vi får Key-Value par med unika Keys som ");
         Console.WriteLine("förhindrar dubbletter och ger snabb sökning.)");
-
-        Util.TetsMe();
     }
 
     static void FindProduct()
@@ -263,12 +261,12 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Sök en produkt
-        string prodCode = GetInput(" * Sök Produkt *", "Ange produktkod: ");
+        string prodCode = Util.GetInput(" * Sök Produkt *", "Ange produktkod: ");
 
         // Försök att hämta produktkod
         if (products.TryGetValue(prodCode, out var product))
             // Och skriv ut, om den finns
-            WriteProduct(prodCode, false, true);
+            Util.WriteProduct(prodCode, false, true);
         else
             Console.WriteLine($"Kan inte hitta produktkod {prodCode}.");
 
@@ -297,7 +295,7 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Registrera ny produkt
-        string prodCode = GetInput(" * Registrera ny produkt *", "Ange produktkod: ");
+        string prodCode = Util.GetInput(" * Registrera ny produkt *", "Ange produktkod: ");
 
         if (prodCode == "")
         {
@@ -322,10 +320,10 @@ internal class Program
             products[prodCode] = new Product(prodCode, prodNamne, prodPrice, prodStock);
             
             // Skriv ut produkten
-            WriteProduct(prodCode, true, true);
+            Util.WriteProduct(prodCode, true, true);
 
             // Logga händelse
-            DoLog("Ny produktkod: " + prodCode);
+            Util.DoLog("Ny produktkod: " + prodCode);
         }
 
         // Fråga:
@@ -355,7 +353,7 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Ändra lagersaldo för produkt
-        string prodCode = GetInput(" * Ändra lagersaldo *", "Ange produktkod: ");
+        string prodCode = Util.GetInput(" * Ändra lagersaldo *", "Ange produktkod: ");
 
         // Kolla om produkten finns
         if (products.TryGetValue(prodCode, out var product))
@@ -365,100 +363,100 @@ internal class Program
             products[prodCode].Stock = InputHelpers.ReadInt("Ange nytt lagersaldo: ");
 
             // Skriv ut produkten
-            WriteProduct(prodCode, true, true);
+            Util.WriteProduct(prodCode, true, true);
 
             // Logga händelse
-            DoLog("Produkt: " + products[prodCode].Name + " - Nytt lagersaldo: " + products[prodCode].Stock);
+            Util.DoLog("Produkt: " + products[prodCode].Name + " - Nytt lagersaldo: " + products[prodCode].Stock);
         }
         else
             Console.WriteLine($"Tyvärr, produktkod {prodCode} kan inte hittas i registret.");
     }
 
-    // --------------------------------------------------------------------
-    // *** Edit - Urban Janssson ***
-    // --------------------------------------------------------------------
-    private static void WriteCaption(string cap)
-    {
-        Console.WriteLine(oneLine);
-        Console.WriteLine(cap);
-        Console.WriteLine(oneLine);
-    }
-    // --------------------------------------------------------------------
-    // *** Edit - Urban Janssson ***
-    // --------------------------------------------------------------------
-    private static void WriteProduct(string prodCode, bool edited, bool doLine)
-    {
-        // Skriv ut produkten
-        if (edited)
-        {
-            Console.WriteLine();
-            Console.WriteLine("Registreringen är genomförd.");
-            Console.WriteLine();
-        }
-        if (doLine) Console.WriteLine(oneLine);
+    //// --------------------------------------------------------------------
+    //// *** Edit - Urban Janssson ***
+    //// --------------------------------------------------------------------
+    //private static void WriteCaption(string cap)
+    //{
+    //    Console.WriteLine(oneLine);
+    //    Console.WriteLine(cap);
+    //    Console.WriteLine(oneLine);
+    //}
+    //// --------------------------------------------------------------------
+    //// *** Edit - Urban Janssson ***
+    //// --------------------------------------------------------------------
+    //private static void WriteProduct(string prodCode, bool edited, bool doLine)
+    //{
+    //    // Skriv ut produkten
+    //    if (edited)
+    //    {
+    //        Console.WriteLine();
+    //        Console.WriteLine("Registreringen är genomförd.");
+    //        Console.WriteLine();
+    //    }
+    //    if (doLine) Console.WriteLine(oneLine);
 
-        Console.WriteLine($"Produkt: {products[prodCode].Name} " +
-            $"| Pris: {products[prodCode].Price} kr " +
-            $"| Lagersaldo: {products[prodCode].Stock}");
+    //    Console.WriteLine($"Produkt: {products[prodCode].Name} " +
+    //        $"| Pris: {products[prodCode].Price} kr " +
+    //        $"| Lagersaldo: {products[prodCode].Stock}");
 
-        if (doLine) Console.WriteLine(oneLine);
-    }
-    // --------------------------------------------------------------------
-    // *** Edit - Urban Janssson ***
-    // --------------------------------------------------------------------
-    private static void DoLog(string log)
-    {
-        // Logga händelse
-        var nowDateTime = DateTime.Now;
-        logMessages.Add(nowDateTime.ToString("yyyy-MM-dd HH:mm:ss") + " - " + log);
+    //    if (doLine) Console.WriteLine(oneLine);
+    //}
+    //// --------------------------------------------------------------------
+    //// *** Edit - Urban Janssson ***
+    //// --------------------------------------------------------------------
+    //private static void DoLog(string log)
+    //{
+    //    // Logga händelse
+    //    var nowDateTime = DateTime.Now;
+    //    logMessages.Add(nowDateTime.ToString("yyyy-MM-dd HH:mm:ss") + " - " + log);
 
-        // Skriv ut senaste log i Debug
-        // if (doDebug) Debug.WriteLine(logMessages[logMessages.Count - 1].ToString());
-        //
-        // Efter BRA tips från Dimitris!
-        if (doDebug) Debug.WriteLine("======== " + logMessages.Last() + " ========");
-    }
-    // --------------------------------------------------------------------
-    // *** Edit - Urban Janssson ***
-    // --------------------------------------------------------------------
-    private static string GetInput(string cap, string msg)
-    {
-        WriteCaption(cap);
-        Console.Write(msg);
+    //    // Skriv ut senaste log i Debug
+    //    // if (doDebug) Debug.WriteLine(logMessages[logMessages.Count - 1].ToString());
+    //    //
+    //    // Efter BRA tips från Dimitris!
+    //    if (doDebug) Debug.WriteLine("======== " + logMessages.Last() + " ========");
+    //}
+    //// --------------------------------------------------------------------
+    //// *** Edit - Urban Janssson ***
+    //// --------------------------------------------------------------------
+    //private static string GetInput(string cap, string msg)
+    //{
+    //    WriteCaption(cap);
+    //    Console.Write(msg);
 
-        string getStr = Console.ReadLine()!;
-        getStr = getStr.ToUpper().Trim();
-        Console.WriteLine();
-        return getStr;
-    }
-    // --------------------------------------------------------------------
-    // *** Edit - Urban Janssson ***
-    // --------------------------------------------------------------------
-    private static string GetCustomer(string cap, string msg)
-    {
-        WriteCaption(cap);
-        Console.Write(msg);
+    //    string getStr = Console.ReadLine()!;
+    //    getStr = getStr.ToUpper().Trim();
+    //    Console.WriteLine();
+    //    return getStr;
+    //}
+    //// --------------------------------------------------------------------
+    //// *** Edit - Urban Janssson ***
+    //// --------------------------------------------------------------------
+    //private static string GetCustomer(string cap, string msg)
+    //{
+    //    WriteCaption(cap);
+    //    Console.Write(msg);
 
-        string getStr = Console.ReadLine()!;
-        getStr = getStr.Trim();
-        Console.WriteLine();
-        return getStr;
-    }
-    // --------------------------------------------------------------------
-    // *** Edit - Urban Janssson ***
-    // --------------------------------------------------------------------
-    private static void WriteCustomer(string msg, bool edited, bool doLine)
-    {
-        // Skriv ut produkten
-        if (edited)
-        {
-            Console.WriteLine("Registreringen är genomförd.");
-            Console.WriteLine();
-        }
-        if (doLine) Console.WriteLine(oneLine);
-        Console.WriteLine(msg);
-        if (doLine) Console.WriteLine(oneLine);
-    }
+    //    string getStr = Console.ReadLine()!;
+    //    getStr = getStr.Trim();
+    //    Console.WriteLine();
+    //    return getStr;
+    //}
+    //// --------------------------------------------------------------------
+    //// *** Edit - Urban Janssson ***
+    //// --------------------------------------------------------------------
+    //private static void WriteCustomer(string msg, bool edited, bool doLine)
+    //{
+    //    // Skriv ut produkten
+    //    if (edited)
+    //    {
+    //        Console.WriteLine("Registreringen är genomförd.");
+    //        Console.WriteLine();
+    //    }
+    //    if (doLine) Console.WriteLine(oneLine);
+    //    Console.WriteLine(msg);
+    //    if (doLine) Console.WriteLine(oneLine);
+    //}
 
 
     static decimal GetPriceBad(string code) { 
@@ -523,17 +521,17 @@ internal class Program
         productsBetter["MCK"] = new Product("MCK", "Mackor", 35.00m, 100);
 
         // Läs in produktkod
-        string prodCode = GetInput(" * Sök Produkt *", "Ange produktkod: ");
+        string prodCode = Util.GetInput(" * Sök Produkt *", "Ange produktkod: ");
 
         // Försök att hämta produktkod
         if (productsBetter.TryGetValue(prodCode, out var product))
         {
             // Om den finns, skriv ut & returnera priset
-            Console.WriteLine(oneLine);
+            Console.WriteLine(Util.oneLine);
             Console.WriteLine($"Produkt: {product.Name} " + 
                 $"| Pris: {product.Price} kr " + 
                 $"| Lagersaldo: {product.Stock}");
-            Console.WriteLine(oneLine);
+            Console.WriteLine(Util.oneLine);
 
             return product.Price;
         }
@@ -568,7 +566,7 @@ internal class Program
         // --------------------------------------------------------------------
         //
         // Spara ny kund i customerQueue
-        string newCustomer = GetCustomer(" * Lagra ny kund *", "Ange kundens namn: ");
+        string newCustomer = Util.GetCustomer(" * Lagra ny kund *", "Ange kundens namn: ");
         if (newCustomer == "")
             Console.WriteLine("Felaktigt namn!");
         else
@@ -576,8 +574,8 @@ internal class Program
             Customer customer = new Customer(newCustomer);
             customerQueue.Enqueue(customer);
 
-            WriteCustomer($"Ny kund: {customer.Name} är lagrad på plats {customerQueue.Count}", true, true);
-            DoLog($"Ny kund: {customer.Name} på plats {customerQueue.Count}");
+            Util.WriteCustomer($"Ny kund: {customer.Name} är lagrad på plats {customerQueue.Count}", true, true);
+            Util.DoLog($"Ny kund: {customer.Name} på plats {customerQueue.Count}");
         }
 
         //if (doDebug) foreach (Customer customer in customerQueue) 
